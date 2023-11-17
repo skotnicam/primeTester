@@ -10,12 +10,17 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Iterator;
 
-public class CellIsFromStreamIterable implements Iterable<Cell> {
+public class CellIsFromExcelIterable implements Iterable<Cell> {
     int columnID;
     Workbook workbook;
     Sheet sheet;
-    public CellIsFromStreamIterable(FileInputStream stream, int sheetID, int columnID) throws IOException {
-        workbook = new XSSFWorkbook(stream);
+    public CellIsFromExcelIterable(FileInputStream stream, int sheetID, int columnID) throws IOException {
+        this(new XSSFWorkbook(stream), sheetID, columnID);
+    }
+
+    //Constructor for unit testing using workbook instead of stream
+    public CellIsFromExcelIterable(Workbook workbook, int sheetID, int columnID) {
+        this.workbook = workbook;
         sheet = workbook.getSheetAt(sheetID);
         this.columnID = columnID;
     }

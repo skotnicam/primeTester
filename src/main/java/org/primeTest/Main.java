@@ -13,7 +13,7 @@ public class Main {
     public static void main(String[] args) {
         try (var argsValidator = new ArgsValidator(args)) //argsValidator owns the stream, and it is responsible for closing it
         {
-            var cellsInRow = new CellIsFromStreamIterable(argsValidator.getStream(),numberOfSheet,numberOfColumn);
+            var cellsInRow = new CellIsFromExcelIterable(argsValidator.getStream(),numberOfSheet,numberOfColumn);
             for (Cell cell  : cellsInRow) {
                 //if the number in the cell is not natural, then it returns -1 which is not a prime
                 long number = CommonMethods.toNatural(cell);
