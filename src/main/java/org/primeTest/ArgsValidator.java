@@ -1,6 +1,5 @@
 package org.primeTest;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
@@ -19,9 +18,9 @@ class ArgsValidator implements AutoCloseable {
             throw new ProgramException("Can't open input file", e);
         }
     }
-
     @Override
     public void close() throws Exception {
-        stream.close();
+            stream.close();
     }
 }
+

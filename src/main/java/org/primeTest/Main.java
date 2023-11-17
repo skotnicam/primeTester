@@ -1,9 +1,9 @@
 package org.primeTest;
+
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import java.io.IOException;
 import java.util.logging.Logger;
-import static java.lang.Character.isDigit;
 
 public class Main {
     private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
@@ -11,19 +11,22 @@ public class Main {
     private static final int numberOfColumn = 1; //Number of row - we assume that the input is in the second row
 
     public static void main(String[] args) {
-        try (var argsValidator = new ArgsValidator(args)){
-            Workbook workbook = new XSSFWorkbook(argsValidator.getStream());
-            Sheet sheet = workbook.getSheetAt(numberOfSheet);
-            for (Row row : sheet) {
-                long number = CommonMethods.toNatural(row.getCell(numberOfColumn));
-                if (CommonMethods.isPrime(number))
+        try (var argsValidator = new ArgsValidator(args)) //argsValidator owns the stream, and it is responsible for closing it
+        {
+            var cellsInRow = new CellIsFromStreamIterable(argsValidator.getStream(),numberOfSheet,numberOfColumn);
+            for (Cell cell  : cellsInRow) {
+                //if the number in the cell is not natural, then it returns -1 which is not a prime
+                long number = CommonMethods.toNatural(cell);
+                if (CommonMethods.isPrime(number)) {
                     LOGGER.info(String.valueOf(number));
+                }
             }
         }
         catch (IOException | ProgramException e) {
             LOGGER.severe("Error reading the Excel file: " + e.getMessage());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        }
+        catch (Exception e) {
+            LOGGER.severe("Unspecified error: " + e.getMessage());
         }
     }
 }
